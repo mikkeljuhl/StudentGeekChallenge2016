@@ -14,15 +14,25 @@ class ProductController extends Controller
         //$this->middleware('auth');
     }
 
+    public function create(){
+        return view('products.create');
+    }
+
     public function store(Request $request){
 
-        if(Auth::check()){
+        if(Auth::check() && Auth::user()->role == "admin"){
 
             $product = new Product();
 
-            $request->title = $product->title;
-            $request->description = $product->description;
-            $request->sku = $product->sku;
+            $product->sku = $request->sku;
+            $product->title = $request->title;
+            $product->slug = $request->slug;
+
+            $product->price = $request->price;
+
+            $product->short_description = $request->short_description;
+            $product->description = $request->description;
+
 
             $product->save();
 

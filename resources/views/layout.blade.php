@@ -10,8 +10,12 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
+
+        @yield("header")
+
         <!-- Styles -->
         <style>
+
 html, body {
     background-color: #fff;
                 color: #636b6f;
@@ -81,5 +85,8 @@ html, body {
     @yield("content")
 </div>
 </div>
+        @yield("footer")
+
+        <script type="text/javascript" src="{{ url("assets/js/all.js") }}"></script>
 </body>
 </html>
