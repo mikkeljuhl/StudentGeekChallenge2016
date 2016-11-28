@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
+use Auth;
+use App\Product;
+use \LoggingAction;
+use Logger;
+
 
 
 class ProductController extends Controller
@@ -20,7 +26,15 @@ class ProductController extends Controller
 
     public function store(Request $request){
 
-        if(Auth::check() && Auth::user()->role == "admin"){
+        if(Auth::check()){
+
+            $this->validate($request,
+                [
+                    'sku' => 'required|max:225',
+                    'title' => 'required|max:225',
+                    'slug' => 'required|max:225',
+                    'price' => 'required|integer',
+                ]);
 
             $product = new Product();
 
@@ -34,8 +48,11 @@ class ProductController extends Controller
             $product->description = $request->description;
 
 
-            $product->save();
+            return logAction(LoggingAction::CR_PROD);
 
+
+            //$product->save();
+            return $product;
         }
     }
 
