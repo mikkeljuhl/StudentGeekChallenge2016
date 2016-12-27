@@ -8,6 +8,7 @@ use Auth;
 use App\Product;
 use \LoggingAction;
 use Logger;
+use Cart;
 
 
 
@@ -53,11 +54,14 @@ class ProductController extends Controller
             $product->short_description = $request->short_description;
             $product->description = $request->description;
 
+            Log::info('Product created: '.$product->title);
+
             $product->save();
             return $product;
     }
 
     public function index(){
+
         if(Auth::check() && Auth::user()->role == "a") {
             $products = Product::orderBy('created_at', 'asc')->get();
             return view('products.admin.index', ['products' => $products]);
@@ -91,6 +95,9 @@ class ProductController extends Controller
         $product->description = $request->description;
 
         $product->save();
+
+        Log::info('Product updated: '.$product->title);
+
         return $product;
     }
 
