@@ -1,0 +1,82 @@
+@extends('layouts.app')
+
+@section("header")
+
+
+
+@endsection
+
+@section('content')
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Create Attribute</div>
+                    <div class="panel-body">
+
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+
+                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/attributes/'.$attribute->id) }}">
+                            {{ csrf_field() }}
+                            {{ method_field('put') }}
+
+                            <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+                                <label for="title" class="col-md-4 control-label">Title</label>
+
+                                <div class="col-md-6">
+                                    <input id="title" type="title" class="form-control" name="title" @if(old('title'))
+                                    value="{{old('title')}}" @else value="{{$attribute->title}}" @endif required autofocus>
+
+                                    @if ($errors->has('title'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('title') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+                            <div class="form-group{{ $errors->has('relation') ? ' has-error' : '' }}">
+                                <label for="relation" class="col-md-4 control-label">Relation</label>
+
+                                <div class="col-md-6">
+                                    <input id="relation" type="text" class="form-control" name="relation" @if(old('relation'))
+                                    value="{{old('relation')}}" @else value="{{$attribute->relation}}" @endif required>
+
+                                    @if ($errors->has('relation'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('relation') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-8 col-md-offset-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section("footer")
+
+
+@endsection
