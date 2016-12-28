@@ -15,6 +15,7 @@ use Cart;
 class ProductController extends Controller
 {
 
+
     public function __construct()
     {
         //we have to be logged in

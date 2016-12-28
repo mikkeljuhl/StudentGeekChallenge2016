@@ -24,6 +24,11 @@ Route::get('/home', 'HomeController@index');
 
 Route::get('/basket', 'BasketController@index');
 
+/* Order */
+
+Route::get('/order/details', 'OrderController@create');
+Route::post('/order/success', 'OrderController@store');
+
 /* Products */
 
 Route::get('/products', 'ProductController@index');

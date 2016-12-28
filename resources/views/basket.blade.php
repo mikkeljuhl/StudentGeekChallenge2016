@@ -1,5 +1,3 @@
-
-
 @extends('layouts.app')
 
 @section('content')
@@ -7,57 +5,55 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Attributes</div>
+                    <div class="panel-heading">Dashboard</div>
 
                     <div class="panel-body">
+                        <table style="width:100%;">
+                            <thead>
+                                <th>Title</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
 
+                            </thead>
+                        @foreach($basket_items as $item)
+                            <tr>
+                                <td>{{ $item->title }}</td>
+                                <td>{{ $item->qty }}</td>
+                                <td>{{ $item->price }}</td>
+                            </tr>
+                        @endforeach
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><strong>Subtotal:</strong></td>
+                                <td>{{ $subtotal  }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><strong>Tax:</strong></td>
+                                <td>{{ $tax }}</td>
 
-<table class="table-striped" style="width:100%">
-    <thead>
-    <tr>
-        <th>Product</th>
-        <th>Qty</th>
-        <th>Price</th>
-        <th>Subtotal</th>
-    </tr>
-    </thead>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><strong>Total:</strong></td>
+                                <td>{{ $subtotal + $tax }}</td>
+                            </tr>
+                        </table>
 
-    <tbody>
-
-    <?php foreach(Cart::content() as $row) :?>
-
-    <tr>
-        <td>
-            <p><strong><?php echo $row->name; ?></strong></p>
-            <p><?php echo ($row->options->has('size') ? $row->options->size : ''); ?></p>
-        </td>
-        <td><input type="text" value="<?php echo $row->qty; ?>"></td>
-        <td>$<?php echo $row->price; ?></td>
-        <td>$<?php echo $row->total; ?></td>
-    </tr>
-
-    <?php endforeach;?>
-
-    </tbody>
-
-    <tfoot>
-    <tr>
-        <td colspan="2">&nbsp;</td>
-        <td>Subtotal</td>
-        <td><?php echo Cart::subtotal(); ?></td>
-    </tr>
-    <tr>
-        <td colspan="2">&nbsp;</td>
-        <td>Tax</td>
-        <td><?php echo Cart::tax(); ?></td>
-    </tr>
-    <tr>
-        <td colspan="2">&nbsp;</td>
-        <td>Total</td>
-        <td><?php echo Cart::total(); ?></td>
-    </tr>
-    </tfoot>
-</table>
+                        <div class="form-group" style="margin-top:20px;">
+                            <div class="col-md-12 col-md-offset-10">
+                                <a href="{{ url('/order/details') }}" class="btn btn-primary" role="button">Buy now</a>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
