@@ -67,12 +67,12 @@
                             </div>
 
 
-
                             <div class="form-group{{ $errors->has('shipping_address') ? ' has-error' : '' }}">
                                 <label for="shipping_address" class="col-md-4 control-label">Shipping address</label>
 
                                 <div class="col-md-6">
-                                    <input id="shipping_address" type="text" class="form-control" name="shipping_address"
+                                    <input id="shipping_address" type="text" class="form-control"
+                                           name="shipping_address"
                                            @if(old('shipping_address') != null) value="{{ old('shipping_address') }}"
                                            @elseif($user->shipping_address != null) value="{{ $user->shipping_address }}"
                                            @endif
@@ -90,7 +90,8 @@
                                 <label for="shipping_postcode" class="col-md-4 control-label">Shipping postcode</label>
 
                                 <div class="col-md-6">
-                                    <input id="shipping_postcode" type="text" class="form-control" name="shipping_postcode"
+                                    <input id="shipping_postcode" type="text" class="form-control"
+                                           name="shipping_postcode"
                                            @if(old('shipping_postcode') != null) value="{{ old('shipping_postcode') }}"
                                            @elseif($user->shipping_postcode != null) value="{{ $user->shipping_postcode }}"
                                            @endif
@@ -123,12 +124,12 @@
                             </div>
 
 
-
                             <div class="form-group{{ $errors->has('shipping_country') ? ' has-error' : '' }}">
                                 <label for="shipping_country" class="col-md-4 control-label">Shipping country</label>
 
                                 <div class="col-md-6">
-                                    <input id="shipping_country" type="text" class="form-control" name="shipping_country"
+                                    <input id="shipping_country" type="text" class="form-control"
+                                           name="shipping_country"
                                            @if(old('shipping_country') != null) value="{{ old('shipping_country') }}"
                                            @elseif($user->shipping_country != null) value="{{ $user->shipping_country }}"
                                            @endif
@@ -164,7 +165,8 @@
                                 <label for="billing_postcode" class="col-md-4 control-label">billing postcode</label>
 
                                 <div class="col-md-6">
-                                    <input id="billing_postcode" type="text" class="form-control" name="billing_postcode"
+                                    <input id="billing_postcode" type="text" class="form-control"
+                                           name="billing_postcode"
                                            @if(old('billing_postcode') != null) value="{{ old('billing_postcode') }}"
                                            @elseif($user->billing_postcode != null) value="{{ $user->billing_postcode }}"
                                            @endif
@@ -214,7 +216,10 @@
                                 </div>
                             </div>
 
-                            <table style="width:100%;">
+                            <fieldset>
+                                <legend>Invoice lines</legend>
+
+                            <table class="table-striped" style="width:100%;">
                                 <thead>
                                 <th>Title</th>
                                 <th>Qty</th>
@@ -246,7 +251,7 @@
                                     <td>{{ $tax }}</td>
 
                                 </tr>
-                                                                <tr>
+                                <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -255,21 +260,87 @@
                                 </tr>
                             </table>
 
-                                <div class="form-group{{ $errors->has('shipping_method') ? ' has-error' : '' }}">
-                                    <label for="shipping_method" class="col-md-4 control-label">Shipping Method</label>
-                                    <div class="col-sm-6">
-                                        <select name="shipping_method" id="shipping_method" class="form-control">
-                                            @foreach($shipping_methods as $method)
-                                                <option value="{{ $method->id }}">{{ $method->title }} {{ $method->price }},-</option>
-                                            @endforeach
-                                        </select>
+                            <div style="margin-top:20px;" class="form-group{{ $errors->has('shipping_method') ? ' has-error' : '' }}">
+                                <label for="shipping_method" class="col-md-4 control-label">Shipping Method</label>
+                                <div class="col-sm-6">
+                                    <select name="shipping_method" id="shipping_method" class="form-control">
+                                        @foreach($shipping_methods as $method)
+                                            <option value="{{ $method->id }}">{{ $method->title }} {{ $method->price }}
+                                                ,-
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                                </fieldset>
+
+                            <fieldset>
+                                <legend>Payment</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="card-holder-name">Name on Card</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="card-holder-name"
+                                               id="card-holder-name" placeholder="Card Holder's Name">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="card-number">Card Number</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="card-number" id="card-number"
+                                               placeholder="Debit/Credit Card Number">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="expiry-month">Expiration Date</label>
+                                    <div class="col-sm-9">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <select class="form-control col-sm-2" name="expiry-month"
+                                                        id="expiry-month">
+                                                    <option>Month</option>
+                                                    <option value="01">Jan (01)</option>
+                                                    <option value="02">Feb (02)</option>
+                                                    <option value="03">Mar (03)</option>
+                                                    <option value="04">Apr (04)</option>
+                                                    <option value="05">May (05)</option>
+                                                    <option value="06">June (06)</option>
+                                                    <option value="07">July (07)</option>
+                                                    <option value="08">Aug (08)</option>
+                                                    <option value="09">Sep (09)</option>
+                                                    <option value="10">Oct (10)</option>
+                                                    <option value="11">Nov (11)</option>
+                                                    <option value="12">Dec (12)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <select class="form-control" name="expiry-year">
+                                                    <option value="16">2016</option>
+                                                    <option value="17">2017</option>
+                                                    <option value="18">2018</option>
+                                                    <option value="19">2019</option>
+                                                    <option value="20">2020</option>
+                                                    <option value="21">2021</option>
+                                                    <option value="22">2022</option>
+                                                    <option value="23">2023</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="cvv">Card CVV</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" name="cvv" id="cvv"
+                                               placeholder="Security Code">
+                                    </div>
+                                </div>
+                            </fieldset>
 
                             <div class="form-group">
                                 <div class="col-md-8 col-md-offset-4">
                                     <button type="submit" class="btn btn-primary">
-                                        Place Order
+                                        Pay now
                                     </button>
                                 </div>
                             </div>

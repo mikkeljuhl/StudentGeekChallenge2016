@@ -21,7 +21,7 @@
                                 </thead>
                                     <tr>
                                         <td>{{ $order->id }}</td>
-                                        <td>{{ $order->subtotal }}</td>
+
                                     </tr>
                             </table>
 
@@ -41,6 +41,13 @@
                                     <td>{{$line->price * $line->qty}}</td>
                                 </tr>
                             @endforeach
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>Total: </strong></td>
+                                    <td>{{ $order->subtotal * 1.25 + $order->shipping_method_price}}</td>
+                                </tr>
+
                             </table>
 
 

@@ -20,7 +20,6 @@ class OrderController extends Controller
 
     public function index(){
         $orders = Order::where("user_id", Auth::user()->id)->get();
-
         return view("orders.overview.index", ["orders" => $orders]);
     }
 
@@ -61,9 +60,10 @@ class OrderController extends Controller
         $order = new Order();
         $order->save(); // so we can get an id
 
-
         $method = ShippingMethod::where('id',$request->shipping_method)->first();
+
         $order->shipping_method_id = $request->shipping_method;
+        $order->shipping_method_price = $method->price;
 
         $invoice_line = new InvoiceLine();
         $invoice_line->price = $method->price;

@@ -14,12 +14,18 @@
                                 <th>ID</th>
                                 <th>Date</th>
                                 <th>Subtotal</th>
+                                <th>Shipping</th>
+                                <th>Total</th>
                                 </thead>
                                 @foreach($orders as $order)
+                                    <pre>{{$order}}</pre>
                                     <tr>
                                         <td><a href="{{ url("/orders/overview/".$order->id."") }}">{{ $order->id }}</a></td>
                                         <td>{{ $order->created_at }}</td>
                                         <td>{{ $order->subtotal }}</td>
+                                        <td>{{ $order->shipping_method_price }}</td>
+                                        <td>{{ $order->subtotal * 1.25 + $order->shipping_method_price}}</td>
+
                                     </tr>
                                 @endforeach
 
