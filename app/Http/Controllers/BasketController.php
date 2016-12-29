@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Product;
 use App\Basket;
+use Redirect;
 
 class BasketController extends Controller
 {
@@ -26,10 +27,6 @@ class BasketController extends Controller
 
 
     public function index(){
-
-        $this->add(Product::where('id',2)->first());
-
-
         $basket_items = $this->getCartItems();
 
         $subtotal = $this->getSubTotal();
@@ -39,7 +36,6 @@ class BasketController extends Controller
     }
 
     public function add(Product $product){
-
             $basket_items = Basket::where('user_id',Auth::user()->id)->where('product_sku',$product->sku)->first();
             if($basket_items != null) {
                 $basket_items->qty = $basket_items->qty + 1;
@@ -53,29 +49,25 @@ class BasketController extends Controller
                 $basket_item->qty = 1;
                 $basket_item->save();
             }
+        return Redirect::back()->with('message', 'Product added to cart!');
     }
 
-    public function remove(Product $product){
+    public static function remove(Basket $basket){
 
-            $basket_items = Basket::where('user_id',Auth::user()->id)->where('product_sku',$product->sku)->get();
+            $basket_items = Basket::where('user_id',Auth::user()->id)->where('product_sku',$basket->product_sku)->first();
             if($basket_items == null) {
-                return Redirect::back()->with('message','You did not have this product in your cart!');
-            }else if(sizeof($basket_items) > 1) {
-                $basket_items->qty = $basket_items->qty - 1;
-                $basket_items->save();
-            }else if(sizeof($basket_items) == 1) {
-                Basket::where('user_id', Auth::user()->id)->where('product_sku', $product->sku)->first()->delete();
+                return Redirect::back()->with('message', 'You did not have this product in your cart!');
             }
-                return Redirect::back()->with('message','Operation Successful!');
 
+            Basket::where('user_id', Auth::user()->id)->where('product_sku', $basket->product_sku)->first()->delete();
     }
 
-    public function getCartItems(){
+    public static function getCartItems(){
             $basket = Basket::where('user_id',Auth::user()->id)->get();
             return $basket;
     }
 
-    public function getSubTotal(){
+    public static function getSubTotal(){
         $basket_items = Basket::where('user_id',Auth::user()->id)->get();
         $subtotal = 0;
         foreach($basket_items as $item){
@@ -84,13 +76,27 @@ class BasketController extends Controller
         return $subtotal;
     }
 
-    public function getTax(){
+    public static function getTax(){
         $basket_items = Basket::where('user_id',Auth::user()->id)->get();
         $total = 0;
         foreach($basket_items as $item){
             $total += $item->price * $item->qty;
         }
         return $total * Basket::getTaxFraction();
+    }
+
+    public static function clearBasket(){
+
+        foreach(self::getCartItems() as $item){
+            $item->qty = 1;
+            $item->save();
+
+            self::remove($item);
+        }
+    }
+
+    public static function countItems(){
+        return sizeof(self::getCartItems());
     }
 
 }
