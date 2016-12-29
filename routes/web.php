@@ -1,5 +1,7 @@
 <?php
 
+
+use App\Order;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,11 +20,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home','ProductController@index');
+
 
 /* Basket */
 
 Route::get('/basket', 'BasketController@index');
+Route::get('/basket/add/{product}', 'BasketController@add');
 
 /* Order */
 
@@ -64,3 +68,7 @@ Route::post('/attribute/relations/store', 'AttributeRelationController@store');
 Route::get('/attribute/relations/{attribute}/edit', 'AttributeRelationController@edit');
 Route::put('/attribute/relations/{attribute}', 'AttributeRelationController@update');
 
+
+/* Facebook login */
+Route::get('/fb', 'SocialAuthController@redirect');
+Route::get('/callback', 'SocialAuthController@callback');

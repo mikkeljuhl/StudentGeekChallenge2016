@@ -6,21 +6,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Product;
-use \LoggingAction;
-use Logger;
-use Cart;
+use App\Category;
 
 
 
 class ProductController extends Controller
 {
-
-
-    public function __construct()
-    {
-        //we have to be logged in
-        //$this->middleware('auth');
-    }
 
     public function create(){
         if(!Auth::check() || Auth::user()->role != "a"){

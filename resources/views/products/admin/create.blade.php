@@ -32,7 +32,7 @@
                                 <label for="title" class="col-md-4 control-label">Title</label>
 
                                 <div class="col-md-6">
-                                    <input id="title" type="title" class="form-control" name="title" value="{{ old('title') }}" required autofocus>
+                                    <input id="title" type="text" class="form-control" name="title" value="{{ old('title') }}" required autofocus>
 
                                     @if ($errors->has('title'))
                                         <span class="help-block">
