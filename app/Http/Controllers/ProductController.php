@@ -12,6 +12,7 @@ use Auth;
 use Log;
 use Redirect;
 use App\Product;
+use Input;
 use App\Category;
 
 
@@ -38,12 +39,15 @@ class ProductController extends Controller
             return view('auth.restricted');
         }
 
+
+
         $this->validate($request,
             [
                 'sku' => 'required|max:225',
                 'title' => 'required|max:225',
                 'slug' => 'required|max:225',
                 'price' => 'required|integer',
+
             ]);
 
         $product = new Product();
@@ -56,6 +60,18 @@ class ProductController extends Controller
 
         $product->short_description = $request->short_description;
         $product->description = $request->description;
+
+        if($request->hasFile('image_url')){
+
+            $file = $request->file('image_url');
+            $name = $product->sku . '.' . $request->file('image_url')->getClientOriginalExtension();
+
+            $file->move(base_path() . '/public/img/products/', $name);
+
+            $product->image_url = '/img/products/'. $name;
+            Log::info('Product image added: ' . $product->image_url);
+
+        }
 
         $product->save();
 
@@ -120,6 +136,18 @@ class ProductController extends Controller
 
         $product->short_description = $request->short_description;
         $product->description = $request->description;
+
+        if($request->hasFile('image_url')){
+
+            $file = $request->file('image_url');
+            $name = $product->sku . '.' . $request->file('image_url')->getClientOriginalExtension();
+
+            $file->move(base_path() . '/public/img/products/', $name);
+
+            $product->image_url = '/img/products/'. $name;
+            Log::info('Product image added: ' . $product->image_url);
+
+        }
 
         $product->save();
 

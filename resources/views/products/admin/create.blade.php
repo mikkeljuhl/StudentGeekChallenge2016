@@ -30,7 +30,7 @@
                         @endif
 
 
-                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/products/store') }}">
+                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/products/store') }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
                             <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
@@ -138,6 +138,20 @@
                                     @if ($errors->has('description'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('description') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group{{ $errors->has('image_url') ? ' has-error' : '' }}">
+                                <label for="image_url" class="col-md-4 control-label">Image URL (jpg only)</label>
+
+                                <div class="col-md-6">
+                                    <input id="image_url" accept="image/jpeg,image/png" type="file" class="form-control" name="image_url"/>
+
+                                    @if ($errors->has('image_url'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('image_url') }}</strong>
                                     </span>
                                     @endif
                                 </div>
