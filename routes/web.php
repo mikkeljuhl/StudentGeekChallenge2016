@@ -35,6 +35,14 @@ Route::post('/orders/success', 'OrderController@store');
 Route::get('/orders/overview', 'OrderController@index');
 Route::get('/orders/overview/{order}', 'OrderController@show');
 
+/* Shipping methods */
+
+Route::get('/shipping/methods/', "ShippingMethodController@index");
+Route::get('/shipping/methods/create', "ShippingMethodController@create");
+Route::post('/shipping/methods/store', "ShippingMethodController@store");
+Route::get('/shipping/methods/{method}/edit', "ShippingMethodController@edit");
+Route::put('/shipping/methods/{method}', "ShippingMethodController@update");
+
 /* Products */
 
 Route::get('/products', 'ProductController@index');

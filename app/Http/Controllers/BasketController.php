@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ShippingMethod;
 use Illuminate\Http\Request;
 use Auth;
 use App\Product;
@@ -28,11 +29,13 @@ class BasketController extends Controller
 
     public function index(){
         $basket_items = $this->getCartItems();
-
         $subtotal = $this->getSubTotal();
         $tax = $this->getTax();
+        $total = $subtotal+$tax;
 
-        return view("basket", ["basket_items" => $basket_items, "subtotal" => $subtotal, "tax" => $tax]);
+        $shipping_methods = ShippingMethod::where("min_order_price","<=",$total)->get();
+
+        return view("basket", ["basket_items" => $basket_items, "subtotal" => $subtotal, "tax" => $tax, "shipping_methods" => $shipping_methods]);
     }
 
     public function add(Product $product){

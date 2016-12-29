@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShippingMethods extends Migration
+class AddTitleToShippingMethod extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateShippingMethods extends Migration
      */
     public function up()
     {
-        Schema::create('shipping_methods', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-            $table->integer("price");
-            $table->integer("min_order_price");
+        Schema::table("shipping_methods", function(Blueprint $table){
+            $table->string("title")->nullable();
         });
     }
 
@@ -28,6 +25,6 @@ class CreateShippingMethods extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shipping_methods');
+        //
     }
 }

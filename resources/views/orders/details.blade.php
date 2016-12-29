@@ -25,7 +25,7 @@
                         @endif
 
 
-                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/order/success') }}">
+                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/orders/success') }}">
                             {{ csrf_field() }}
 
                             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -246,15 +246,25 @@
                                     <td>{{ $tax }}</td>
 
                                 </tr>
-                                <tr>
+                                                                <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><strong>Total:</strong></td>
+                                    <td><strong>Total (excl. shipping):</strong></td>
                                     <td>{{ $subtotal + $tax }}</td>
                                 </tr>
                             </table>
 
+                                <div class="form-group{{ $errors->has('shipping_method') ? ' has-error' : '' }}">
+                                    <label for="shipping_method" class="col-md-4 control-label">Shipping Method</label>
+                                    <div class="col-sm-6">
+                                        <select name="shipping_method" id="shipping_method" class="form-control">
+                                            @foreach($shipping_methods as $method)
+                                                <option value="{{ $method->id }}">{{ $method->title }} {{ $method->price }},-</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
 
                             <div class="form-group">
                                 <div class="col-md-8 col-md-offset-4">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\InvoiceLine;
+use App\ShippingMethod;
 use Illuminate\Http\Request;
 use App\Basket;
 use App\Order;
@@ -36,8 +37,10 @@ class OrderController extends Controller
         $basket_items = BasketController::getCartItems();
         $subtotal = BasketController::getSubTotal();
         $tax = BasketController::getTax();
+        $total = $tax + $subtotal;
+        $shipping_methods = ShippingMethod::where('min_order_price','<=',$total)->get();
 
-        return view("orders.details", ['user' => Auth::user(), 'basket_items' => $basket_items, 'subtotal' => $subtotal, 'tax' => $tax]);
+        return view("orders.details", ['user' => Auth::user(), 'basket_items' => $basket_items, 'subtotal' => $subtotal, 'tax' => $tax, 'shipping_methods' => $shipping_methods]);
     }
 
     public function store(Request $request){
@@ -57,6 +60,18 @@ class OrderController extends Controller
 
         $order = new Order();
         $order->save(); // so we can get an id
+
+
+        $method = ShippingMethod::where('id',$request->shipping_method)->first();
+        $order->shipping_method_id = $request->shipping_method;
+
+        $invoice_line = new InvoiceLine();
+        $invoice_line->price = $method->price;
+        $invoice_line->qty = 1;
+        $invoice_line->product_sku = "SHIPPING";
+        $invoice_line->title = $method->title;
+        $invoice_line->order_id = $order->id;
+        $invoice_line->save();
 
         foreach(BasketController::getCartItems() as $item){
             $invoice_line = new InvoiceLine();
@@ -107,7 +122,7 @@ class OrderController extends Controller
 
         BasketController::clearBasket();
 
-        return Redirect::url("/orders/overview/".$order->id)->with("message", "Thank you for the order!");
+        return redirect("/orders/overview/".$order->id)->with("message", "Thank you for the order!");
 
     }
 

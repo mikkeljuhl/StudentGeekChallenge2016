@@ -20,7 +20,7 @@
                                 <th>Subtotal</th>
                                 </thead>
                                     <tr>
-                                        <td><a href="{{ url("/orders/".$order->id."") }}">{{ $order->id }}</a></td>
+                                        <td>{{ $order->id }}</td>
                                         <td>{{ $order->subtotal }}</td>
                                     </tr>
                             </table>

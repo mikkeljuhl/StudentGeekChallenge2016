@@ -51,7 +51,7 @@
 
                         <div class="form-group" style="margin-top:20px;">
                             <div class="col-md-12 col-md-offset-10">
-                                <a href="{{ url('/order/details') }}" class="btn btn-primary" role="button">Buy now</a>
+                                <a href="{{ url('/orders/details') }}" class="btn btn-primary" role="button">Buy now</a>
                             </div>
                         </div>
 
