@@ -12,16 +12,18 @@
                             <table class="table-striped" style="width:100%">
                                 <thead>
                                 <th>ID</th>
+                                <th>Date</th>
                                 <th>Subtotal</th>
                                 </thead>
                                 @foreach($orders as $order)
-
                                     <tr>
-                                        <td><a href="{{ url("/orders/".$order->id."") }}">{{ $order->id }}</a></td>
+                                        <td><a href="{{ url("/orders/overview/".$order->id."") }}">{{ $order->id }}</a></td>
+                                        <td>{{ $order->created_at }}</td>
                                         <td>{{ $order->subtotal }}</td>
                                     </tr>
-
                                 @endforeach
+
+
                             </table>
                         </div>
                     </div>

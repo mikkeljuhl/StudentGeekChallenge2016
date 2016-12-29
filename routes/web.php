@@ -30,10 +30,10 @@ Route::get('/basket/add/{product}', 'BasketController@add');
 
 /* Order */
 
-Route::get('/order/details', 'OrderController@create');
-Route::post('/order/success', 'OrderController@store');
-Route::get('/order/overview', 'OrderController@index');
-Route::get('/order/overview/{order}', 'OrderController@show');
+Route::get('/orders/details', 'OrderController@create');
+Route::post('/orders/success', 'OrderController@store');
+Route::get('/orders/overview', 'OrderController@index');
+Route::get('/orders/overview/{order}', 'OrderController@show');
 
 /* Products */
 

@@ -7,13 +7,28 @@ use Illuminate\Http\Request;
 use App\Basket;
 use App\Order;
 use Auth;
+use Redirect;
 
 class OrderController extends Controller
 {
 
-    public function __construct(Basket $basket)
+    public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function index(){
+        $orders = Order::where("user_id", Auth::user()->id)->get();
+
+        return view("orders.overview.index", ["orders" => $orders]);
+    }
+
+    public function show(Order $order){
+        $invoice_lines = InvoiceLine::where("order_id", $order->id)->get();
+        $date = new \DateTime($order->created_at);
+        $date = $date->format("d/m-Y H:i");
+
+        return view("orders.overview.show", ["order" => $order, "date" => $date, "invoice_lines" => $invoice_lines]);
     }
 
     public function create(){
@@ -52,6 +67,8 @@ class OrderController extends Controller
             $invoice_line->title = $item->title;
             $invoice_line->order_id = $order->id;
 
+            $invoice_line->save();
+
         }
 
         $user = Auth::user();
@@ -82,6 +99,7 @@ class OrderController extends Controller
         $order->billing_country = $request->billing_country;
 
         $order->name = $request->name;
+        $order->user_id = Auth()->user()->id;
         $order->phone = $request->phone;
         $order->subtotal = BasketController::getSubTotal();
 
@@ -89,7 +107,9 @@ class OrderController extends Controller
 
         BasketController::clearBasket();
 
-        return $order;
+        return Redirect::url("/orders/overview/".$order->id)->with("message", "Thank you for the order!");
 
     }
+
+
 }
