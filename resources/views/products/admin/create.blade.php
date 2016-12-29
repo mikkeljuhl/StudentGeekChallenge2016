@@ -14,6 +14,11 @@
                     <div class="panel-heading">Create product</div>
                     <div class="panel-body">
 
+                        @if(session()->get('message'))
+                            <div class="alert alert-success alert-dismissable">{{ session()->get('message') }}</div>
+                        @endif
+
+
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <ul>
@@ -84,6 +89,22 @@
                                     @endif
                                 </div>
                             </div>
+
+                            @foreach($attribute_relations as $attribute_relation)
+                                <div class="form-group{{ $errors->has("att_r_".$attribute_relation->id) ? ' has-error' : '' }}">
+                                    <label for="att_r_{{$attribute_relation->id}}" class="col-md-4 control-label"> {{ $attribute_relation->title }}</label>
+                                    <div class="col-sm-6">
+                                        <select name="att_r_{{$attribute_relation->id}}" id="att_r_{{$attribute_relation->id}}" class="form-control">
+                                            <option value=""></option>
+                                            @foreach($attributes as $attribute)
+                                                @if($attribute->relation == $attribute_relation->id)
+                                                    <option value="{{ $attribute->id }}" {{ (old("att_r_".$attribute_relation->id) == $attribute->id ? "selected":"") }}>{{ $attribute->title }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endforeach
 
                             <div class="form-group{{ $errors->has('short_description') ? ' has-error' : '' }}">
                                 <label for="short_description" class="col-md-4 control-label">Short description</label>

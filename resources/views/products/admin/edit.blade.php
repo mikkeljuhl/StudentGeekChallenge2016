@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Create product</div>
+                    <div class="panel-heading">Edit product</div>
                     <div class="panel-body">
 
                         @if (count($errors) > 0)
@@ -25,7 +25,8 @@
                         @endif
 
 
-                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/products/'.$product->id) }}">
+                        <form class="form-horizontal" role="form" method="POST"
+                              action="{{ url('/products/'.$product->id) }}">
                             {{ csrf_field() }}
                             {{ method_field('PUT') }}
 
@@ -34,7 +35,8 @@
 
                                 <div class="col-md-6">
                                     <input id="title" type="title" class="form-control" name="title" @if(old('title'))
-                                    value="{{old('title')}}" @else value="{{$product->title}}" @endif  required autofocus>
+                                    value="{{old('title')}}" @else value="{{$product->title}}" @endif  required
+                                           autofocus>
 
                                     @if ($errors->has('title'))
                                         <span class="help-block">
@@ -90,12 +92,46 @@
                                 </div>
                             </div>
 
+                            @foreach($attribute_relations as $attribute_relation)
+                                <div class="form-group{{ $errors->has($attribute_relation->id) ? ' has-error' : '' }}">
+                                    <label for="att_r_{{$attribute_relation->id}}"
+                                           class="col-md-4 control-label"> {{ $attribute_relation->title }}</label>
+                                    <div class="col-sm-6">
+                                        <select name="att_r_{{$attribute_relation->id}}"
+                                                id="att_r_{{$attribute_relation->id}}" class="form-control">
+                                            <option value=""></option>
+
+                                            @foreach($attributes as $attribute)
+                                                @if($attribute->relation == $attribute_relation->id)
+                                                    @foreach($product_attributes as $product_attribute)
+                                                        @if($product_attribute->attribute_id == $attribute->id)
+                                                            <option value="{{ $attribute->id }}"
+                                                                    {{ ($product_attribute->attribute_id == $attribute->id ? "selected":"") }}>
+                                                                {{ $attribute->title }}
+                                                            </option>
+                                                            @break
+                                                        @endif
+                                                    @endforeach
+                                                    <option value="{{ $attribute->id }}"
+                                                            {{ ($product_attribute->attribute_id == $attribute->id ? "selected":"") }}>
+                                                        {{ $attribute->title }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endforeach
+
+
                             <div class="form-group{{ $errors->has('short_description') ? ' has-error' : '' }}">
                                 <label for="short_description" class="col-md-4 control-label">Short description</label>
 
                                 <div class="col-md-6">
-                                    <input id="short_description" type="text" class="form-control" name="short_description" @if(old('short_description'))
-                                    value="{{old('short_description')}}" @else value="{{$product->short_description}}" @endif required>
+                                    <input id="short_description" type="text" class="form-control"
+                                           name="short_description" @if(old('short_description'))
+                                           value="{{old('short_description')}}"
+                                           @else value="{{$product->short_description}}" @endif required>
 
                                     @if ($errors->has('short_description'))
                                         <span class="help-block">
@@ -110,9 +146,11 @@
 
                                 <div class="col-md-6">
                                     @if(old('description'))
-                                        <textarea id="description" class="form-control" name="description">{{old('sku')}}</textarea>
+                                        <textarea id="description" class="form-control"
+                                                  name="description">{{old('sku')}}</textarea>
                                     @else
-                                        <textarea id="description" class="form-control" name="description">{{$product->description}}</textarea>
+                                        <textarea id="description" class="form-control"
+                                                  name="description">{{$product->description}}</textarea>
                                     @endif
 
                                     @if ($errors->has('description'))

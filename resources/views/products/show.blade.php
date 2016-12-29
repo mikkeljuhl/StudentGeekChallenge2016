@@ -7,11 +7,14 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Products</div>
 
-                    @if(session()->get('message'))
-                    <div class="alert alert-success alert-dismissable">{{ session()->get('message') }}</div>
-                    @endif
+
 
                     <div class="panel-body">
+
+                        @if(session()->get('message'))
+                            <div class="alert alert-success alert-dismissable">{{ session()->get('message') }}</div>
+                        @endif
+
                                         <td>{{ $product->id }}</td>
                                         <td>{{ $product->title }}</td>
                                         <td>{{ $product->sku }}</td>
