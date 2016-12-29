@@ -32,6 +32,8 @@ Route::get('/basket/add/{product}', 'BasketController@add');
 
 Route::get('/order/details', 'OrderController@create');
 Route::post('/order/success', 'OrderController@store');
+Route::get('/order/overview', 'OrderController@index');
+Route::get('/order/overview/{order}', 'OrderController@show');
 
 /* Products */
 

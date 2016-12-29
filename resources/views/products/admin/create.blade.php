@@ -106,6 +106,15 @@
                                 </div>
                             @endforeach
 
+                            <div class="form-group{{ $errors->has('categories') ? ' has-error' : '' }}">
+                                <label for="categories" class="col-md-4 control-label">Categories</label>
+                                <div class="col-md-6">
+                                    @foreach($categories as $category)
+                                    <input type="checkbox" name="categories[]" id="{{$category->id}}" value="{{ $category->id }}" > {{ $category->title }}<br/>
+                                    @endforeach
+                                </div>
+                            </div>
+
                             <div class="form-group{{ $errors->has('short_description') ? ' has-error' : '' }}">
                                 <label for="short_description" class="col-md-4 control-label">Short description</label>
 

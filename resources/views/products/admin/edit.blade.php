@@ -103,17 +103,8 @@
 
                                             @foreach($attributes as $attribute)
                                                 @if($attribute->relation == $attribute_relation->id)
-                                                    @foreach($product_attributes as $product_attribute)
-                                                        @if($product_attribute->attribute_id == $attribute->id)
-                                                            <option value="{{ $attribute->id }}"
-                                                                    {{ ($product_attribute->attribute_id == $attribute->id ? "selected":"") }}>
-                                                                {{ $attribute->title }}
-                                                            </option>
-                                                            @break
-                                                        @endif
-                                                    @endforeach
                                                     <option value="{{ $attribute->id }}"
-                                                            {{ ($product_attribute->attribute_id == $attribute->id ? "selected":"") }}>
+                                                            @if(in_array($attribute->id , $product_attribute_id)) selected @endif>
                                                         {{ $attribute->title }}
                                                     </option>
                                                 @endif
@@ -123,6 +114,14 @@
                                 </div>
                             @endforeach
 
+                            <div class="form-group{{ $errors->has('categories') ? ' has-error' : '' }}">
+                                <label for="categories" class="col-md-4 control-label">Categories</label>
+                                <div class="col-md-6">
+                                    @foreach($categories as $category)
+                                        <input type="checkbox" name="categories[]" id="{{$category->id}}" value="{{ $category->id }}" @if(in_array($category->id, $product_categories_id)) checked @endif > {{ $category->title }}<br/>
+                                    @endforeach
+                                </div>
+                            </div>
 
                             <div class="form-group{{ $errors->has('short_description') ? ' has-error' : '' }}">
                                 <label for="short_description" class="col-md-4 control-label">Short description</label>

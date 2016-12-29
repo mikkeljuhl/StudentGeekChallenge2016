@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Attribute;
 use App\AttributeRelation;
 use App\ProductAttribute;
+use App\ProductCategory;
 use Illuminate\Http\Request;
 use Auth;
 use Log;
@@ -25,7 +26,9 @@ class ProductController extends Controller
 
         $attributes = Attribute::get();
         $attribute_relations = AttributeRelation::get();
-        return view('products.admin.create', ["attributes" => $attributes, "attribute_relations" => $attribute_relations]);
+        $categories = Category::get();
+
+        return view('products.admin.create', ["categories" => $categories, "attributes" => $attributes, "attribute_relations" => $attribute_relations]);
     }
 
     public function store(Request $request)
@@ -69,6 +72,14 @@ class ProductController extends Controller
 
                 Log::info('Product and attribute relation associated: ' . $product->title . ' ' . $attribute_relation->title);
             }
+        }
+
+        foreach($request->categories as $category_id){
+            $product_category = new ProductCategory();
+            $product_category->product_id = $product->id;
+            $product_category->category_id = $category_id;
+            $product_category->save();
+            Log::info('Product ' . $product->title . ' is in category: ' . $category_id);
         }
 
         return Redirect::back()->with('message', 'Product with title '.$product->title.' created!');
@@ -131,6 +142,17 @@ class ProductController extends Controller
             }
         }
 
+        ProductCategory::where('product_id',$product->id)->delete();
+
+        foreach($request->categories as $category_id){
+            $product_category = new ProductCategory();
+            $product_category->product_id = $product->id;
+            $product_category->category_id = $category_id;
+            $product_category->save();
+
+            Log::info('Product ' . $product->title . ' is in category: ' . $category_id);
+        }
+
         return Redirect::back()->with('message', 'Product with title '.$product->title.' updated!');
     }
 
@@ -140,16 +162,32 @@ class ProductController extends Controller
             return view('auth.restricted');
         }
 
+        $categories = Category::get();
         $attributes = Attribute::get();
         $attribute_relations = AttributeRelation::get();
         $product_attributes = ProductAttribute::where("product_id",$product->id)->get();
+        $product_categories = ProductCategory::where("product_id",$product->id)->get();
+
+        $product_categories_id = array();
+        foreach($product_categories as $product_category){
+            array_push($product_categories_id,$product_category->category_id);
+        }
+
+        $product_attribute_id = array();
+        foreach($product_attributes as $product_attribute){
+            array_push($product_attribute_id,$product_attribute->attribute_id);
+        }
+
+
 
         return view('products.admin.edit',
             [
                 "product" => $product,
+                "categories" => $categories,
+                "product_categories_id" => $product_categories_id,
                 "attributes" => $attributes,
                 "attribute_relations" => $attribute_relations,
-                "product_attributes" => $product_attributes
+                "product_attribute_id" => $product_attribute_id
             ]);
     }
 
