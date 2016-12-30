@@ -20,7 +20,6 @@ class AttributeController extends Controller
 
     public function create()
     {
-
         $relations = AttributeRelation::get();
 
         return view('attributes.create', ['relations' => $relations]);
@@ -39,11 +38,11 @@ class AttributeController extends Controller
             ]);
 
         $attribute = new Attribute();
-
         $attribute->title = $request->title;
         $attribute->relation = $request->relation;
 
         $attribute->save();
+
         return Redirect::back()->with('message', 'Attribute created');
 
     }

@@ -59,7 +59,6 @@ class ShippingMethodController extends Controller
         $method->save();
 
         return Redirect::back()->with('message', 'Shipping method updated');
-
     }
 
 }

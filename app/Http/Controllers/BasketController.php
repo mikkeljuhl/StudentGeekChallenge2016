@@ -12,12 +12,6 @@ use Redirect;
 class BasketController extends Controller
 {
 
-    /*
-     * Add Item: sku, qty, price
-     * Total
-     * Cart Items
-     * Remove item: sku (minus 1 qty, if exists)
-     */
     protected $basket;
 
     public function __construct(Basket $basket)
@@ -77,6 +71,7 @@ class BasketController extends Controller
     public static function getSubTotal()
     {
         $basket_items = Basket::where('user_id', Auth::user()->id)->get();
+
         $subtotal = 0;
         foreach ($basket_items as $item) {
             $subtotal += $item->price * $item->qty;
@@ -96,7 +91,7 @@ class BasketController extends Controller
 
     public static function clearBasket()
     {
-
+        //set all quantities to 1 and then remove them
         foreach (self::getCartItems() as $item) {
             $item->qty = 1;
             $item->save();
@@ -104,10 +99,4 @@ class BasketController extends Controller
             self::remove($item);
         }
     }
-
-    public static function countItems()
-    {
-        return sizeof(self::getCartItems());
-    }
-
 }

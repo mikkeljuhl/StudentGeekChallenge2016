@@ -42,11 +42,6 @@ class CategoryController extends Controller
 
         $category->save();
 
-        Search::insert("category_index", array(
-            'title' => $category->title,
-            'slug' => $category->slug,
-        ));
-
         return Redirect::back()->with('message', 'Category created');
 
     }

@@ -70,6 +70,7 @@ class OrderController extends Controller
         $order->shipping_method_price = $method->price;
         $order->shipping_method_title = $method->title;
 
+        //create invoice lines
         foreach (BasketController::getCartItems() as $item) {
             $invoice_line = new InvoiceLine();
 
@@ -80,7 +81,6 @@ class OrderController extends Controller
             $invoice_line->order_id = $order->id;
 
             $invoice_line->save();
-
         }
 
         $user = Auth::user();

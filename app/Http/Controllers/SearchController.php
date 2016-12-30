@@ -11,9 +11,7 @@ class SearchController extends Controller
 {
     public function search(Request $request)
     {
-
         $results = Search::search("title", $request->search_query, array('fuzzy' => true))->get();
-
 
         // if there is only one result, jump directly to page
         if (count($results) == 1) {
@@ -32,6 +30,5 @@ class SearchController extends Controller
         }
 
         return view("products.listing", ["products" => $products]);
-
     }
 }

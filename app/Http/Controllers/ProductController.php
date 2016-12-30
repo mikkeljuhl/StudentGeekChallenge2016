@@ -35,11 +35,9 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-
         if (!Auth::check() || Auth::user()->role != "a") {
             return view('auth.restricted');
         }
-
 
         $this->validate($request,
             [
@@ -55,12 +53,11 @@ class ProductController extends Controller
         $product->sku = $request->sku;
         $product->title = $request->title;
         $product->slug = $request->slug;
-
         $product->price = $request->price;
-
         $product->short_description = $request->short_description;
         $product->description = $request->description;
 
+        //if we have the file, we insert in the database and move the file to location
         if ($request->hasFile('image_url')) {
 
             $file = $request->file('image_url');
@@ -100,7 +97,6 @@ class ProductController extends Controller
             }
         }
 
-
         Search::insert($product->id, array(
             'title' => $product->title,
             'slug' => $product->slug,
@@ -113,16 +109,12 @@ class ProductController extends Controller
 
     public function index()
     {
-
-
         $products = Product::orderBy('created_at', 'asc')->get();
         return view('products.index', ['products' => $products]);
-
     }
 
     public function update(Product $product, Request $request)
     {
-
         if (!Auth::check() || Auth::user()->role != "a") {
             return view('auth.restricted');
         }
@@ -138,14 +130,11 @@ class ProductController extends Controller
         $product->sku = $request->sku;
         $product->title = $request->title;
         $product->slug = $request->slug;
-
         $product->price = $request->price;
-
         $product->short_description = $request->short_description;
         $product->description = $request->description;
 
         if ($request->hasFile('image_url')) {
-
             $file = $request->file('image_url');
             $name = $product->sku . '.' . $request->file('image_url')->getClientOriginalExtension();
 
@@ -153,16 +142,14 @@ class ProductController extends Controller
 
             $product->image_url = '/img/products/' . $name;
             Log::info('Product image added: ' . $product->image_url);
-
         }
 
         $product->save();
 
         Log::info('Product updated: ' . $product->title);
 
-        //brute force: delete all product attributes with associated product id -- works ok for now
+        //beware brute force!!: delete all product attributes with associated product id -- works ok for now
         ProductAttribute::where('product_id', $product->id)->delete();
-
         foreach (AttributeRelation::get() as $attribute_relation) {
             $attribute_relations_request_id = "att_r_" . $attribute_relation->id;
 
@@ -225,7 +212,6 @@ class ProductController extends Controller
             ]);
     }
 
-
     public function show($slug)
     {
         $product = Product::where('slug', $slug)->first();
@@ -233,20 +219,18 @@ class ProductController extends Controller
         if ($product == null) {
             return "404";
         }
-
         $attributes = Attribute::get();
-
         $product_attributes = ProductAttribute::where('product_id', $product->id)->get();
-
         $product_attribute_relations = AttributeRelation::get();
-
         $product_categories = ProductCategory::where('product_id', $product->id)->get();
 
+        //get all categories associated with this product
         $categories = array();
         foreach ($product_categories as $product_category) {
             $category = Category::where('id', $product_category->category_id)->first();
             array_push($categories, $category);
         }
+
         return view('products.show', ['product' => $product, 'attributes' => $attributes, 'product_attributes' => $product_attributes, 'product_attribute_relations' => $product_attribute_relations, 'categories' => $categories]);
     }
 }

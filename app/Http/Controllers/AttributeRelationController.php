@@ -33,12 +33,8 @@ class AttributeRelationController extends Controller
             ]);
 
         $attribute = new AttributeRelation();
-
         $attribute->title = $request->title;
-
         $attribute->save();
-
-        $attributes = AttributeRelation::orderBy('created_at', 'asc')->get();
 
         return Redirect::back()->with('message', 'Attribute relation created');
     }
