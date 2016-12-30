@@ -30,6 +30,6 @@ class AttributeRelations extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('');
+        Schema::dropIfExists('attribute_relation');
     }
 }
