@@ -21,7 +21,12 @@ class Products extends Migration
             $table->integer('price');
             $table->text('short_description');
             $table->text('description');
+            $table->string("image_url")->nullable();
             $table->timestamps();
+
+            $table->index('sku');
+            $table->index('slug');
+            $table->unique('sku');
     });
     }
 

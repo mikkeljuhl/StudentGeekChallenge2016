@@ -19,6 +19,7 @@ class Basket extends Migration
             $table->string('product_sku');
             $table->integer('qty');
             $table->integer('price');
+            $table->string("title");
             $table->timestamps();
         });
     }

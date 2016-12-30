@@ -20,6 +20,20 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->string("role")->default("u");
+
+            $table->string("shipping_address")->nullable();
+            $table->string("billing_address")->nullable();
+            $table->string("shipping_postcode")->nullable();
+            $table->string("billing_postcode")->nullable();
+            $table->string("shipping_country")->nullable();
+            $table->string("billing_country")->nullable();
+            $table->string("shipping_city")->nullable();
+            $table->string("billing_city")->nullable();
+
+            $table->string("phone")->nullable();
+
         });
     }
 

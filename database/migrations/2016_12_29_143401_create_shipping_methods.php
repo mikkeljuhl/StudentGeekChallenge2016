@@ -18,6 +18,7 @@ class CreateShippingMethods extends Migration
             $table->timestamps();
             $table->integer("price");
             $table->integer("min_order_price");
+            $table->string("title");
         });
     }
 
