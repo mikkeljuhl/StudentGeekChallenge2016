@@ -25,7 +25,10 @@ class SearchController extends Controller
         $products = array();
 
         foreach ($results as $result) {
-            array_push($products, Product::where("slug", $result['slug'])->first());
+            $product = Product::where("slug", $result['slug'])->first();
+            if($product != null){
+                array_push($products, $product);
+            }
         }
 
         return view("products.listing", ["products" => $products]);
