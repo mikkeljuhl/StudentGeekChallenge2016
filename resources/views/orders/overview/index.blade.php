@@ -5,9 +5,13 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Orders</div>
+                    <div class="panel-heading">Order overview</div>
 
                     <div class="panel-body">
+                        @if(session()->get('message'))
+                            <div class="alert alert-success alert-dismissable">{{ session()->get('message') }}</div>
+                        @endif
+
                         <div class="table-responsive">
                             <table class="table-striped" style="width:100%">
                                 <thead>
@@ -18,7 +22,6 @@
                                 <th>Total</th>
                                 </thead>
                                 @foreach($orders as $order)
-                                    <pre>{{$order}}</pre>
                                     <tr>
                                         <td><a href="{{ url("/orders/overview/".$order->id."") }}">{{ $order->id }}</a></td>
                                         <td>{{ $order->created_at }}</td>

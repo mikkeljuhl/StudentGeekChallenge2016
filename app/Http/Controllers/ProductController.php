@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Log;
 use Redirect;
+use Search;
 use App\Product;
 use Input;
 use App\Category;
@@ -90,13 +91,23 @@ class ProductController extends Controller
             }
         }
 
-        foreach($request->categories as $category_id){
-            $product_category = new ProductCategory();
-            $product_category->product_id = $product->id;
-            $product_category->category_id = $category_id;
-            $product_category->save();
-            Log::info('Product ' . $product->title . ' is in category: ' . $category_id);
+        if(count($request->categories ) > 0){
+            foreach($request->categories as $category_id){
+                $product_category = new ProductCategory();
+                $product_category->product_id = $product->id;
+                $product_category->category_id = $category_id;
+                $product_category->save();
+                Log::info('Product ' . $product->title . ' is in category: ' . $category_id);
+            }
         }
+
+
+        Search::insert($product->id, array(
+            'title' => $product->title,
+            'slug' => $product->slug,
+            'short_description' => $product->short_description,
+            'description' => $product->description,
+        ));
 
         return Redirect::back()->with('message', 'Product with title '.$product->title.' created!');
     }
@@ -104,13 +115,10 @@ class ProductController extends Controller
     public function index()
     {
 
-        if (Auth::check() && Auth::user()->role == "a") {
+
             $products = Product::orderBy('created_at', 'asc')->get();
-            return view('products.admin.index', ['products' => $products]);
-        } else {
-            $categories = Category::orderby('updated_at', 'asc')->get();
-            return view('products.index', ['categories' => $categories]);
-        }
+            return view('products.index', ['products' => $products]);
+
     }
 
     public function update(Product $product, Request $request)
@@ -223,6 +231,24 @@ class ProductController extends Controller
     public function show($slug)
     {
         $product = Product::where('slug', $slug)->first();
-        return view('products.show', ['product' => $product]);
+
+        if($product == null){
+            return "404";
+        }
+
+        $attributes = Attribute::get();
+
+        $product_attributes = ProductAttribute::where('product_id',$product->id)->get();
+
+        $product_attribute_relations = AttributeRelation::get();
+
+        $product_categories = ProductCategory::where('product_id',$product->id)->get();
+
+        $categories = array();
+        foreach ($product_categories as $product_category){
+            $category = Category::where('id',$product_category->category_id)->first();
+            array_push($categories, $category);
+        }
+        return view('products.show', ['product' => $product, 'attributes' => $attributes, 'product_attributes' => $product_attributes, 'product_attribute_relations' => $product_attribute_relations,'categories' => $categories]);
     }
 }

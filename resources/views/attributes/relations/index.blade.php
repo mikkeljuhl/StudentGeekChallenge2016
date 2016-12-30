@@ -8,6 +8,10 @@
                     <div class="panel-heading">Attribute Relations</div>
 
                     <div class="panel-body">
+                        @if(session()->get('message'))
+                            <div class="alert alert-success alert-dismissable">{{ session()->get('message') }}</div>
+                        @endif
+
                         <div class="table-responsive">
                             <table class="table-striped" style="width:100%">
                                 <thead>

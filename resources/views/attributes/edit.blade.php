@@ -13,6 +13,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Create Attribute</div>
                     <div class="panel-body">
+                        @if(session()->get('message'))
+                            <div class="alert alert-success alert-dismissable">{{ session()->get('message') }}</div>
+                        @endif
 
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
@@ -45,21 +48,16 @@
                             </div>
 
 
-                            <div class="form-group{{ $errors->has('relation') ? ' has-error' : '' }}">
-                                <label for="relation" class="col-md-4 control-label">Relation</label>
-
-                                <div class="col-md-6">
-                                    <input id="relation" type="text" class="form-control" name="relation" @if(old('relation'))
-                                    value="{{old('relation')}}" @else value="{{$attribute->relation}}" @endif required>
-
-                                    @if ($errors->has('relation'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('relation') }}</strong>
-                                    </span>
-                                    @endif
+                            <div class="form-group{{ $errors->has("relation") ? ' has-error' : '' }}">
+                                <label for="relation" class="col-md-4 control-label"> Relation</label>
+                                <div class="col-sm-6">
+                                    <select name="relation" id="relation" class="form-control">
+                                        @foreach($relations as $relation)
+                                            <option value="{{ $relation->id }}" {{ ($attribute->relation == $relation->id ? "selected":"") }}>{{ $relation->title }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <div class="col-md-8 col-md-offset-4">
                                     <button type="submit" class="btn btn-primary">

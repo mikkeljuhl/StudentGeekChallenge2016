@@ -21,7 +21,7 @@ class ShippingMethodController extends Controller
         $this->validate($request,
             [
                 'title' => 'required',
-                'price' => 'required|integer|max:225',
+                'price' => 'required|integer',
                 'min_order_price' => 'required|integer',
             ]);
 
@@ -44,7 +44,7 @@ class ShippingMethodController extends Controller
         $this->validate($request,
             [
                 'title' => 'required',
-                'price' => 'required|integer|max:225',
+                'price' => 'required|integer',
                 'min_order_price' => 'required|integer',
             ]);
 

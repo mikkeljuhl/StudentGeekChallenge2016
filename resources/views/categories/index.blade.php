@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Attributes</div>
+                    <div class="panel-heading">Categories</div>
 
                     <div class="panel-body">
                         @if(session()->get('message'))
@@ -15,20 +15,20 @@
                         <div class="table-responsive">
                             <table class="table-striped" style="width:100%">
                                 <thead>
-                                <th>ID</th>
-                                <th>Title</th>
-                                <th>Relation</th>
-                                </thead>
-                                @foreach($attributes as $attribute)
 
+                                <th>Title</th>
+
+
+                                </thead>
+                                @foreach($categories as $category)
                                     <tr>
-                                        <td><a href="{{ url("/attributes/".$attribute->id."/edit") }}">{{ $attribute->id }}</a></td>
-                                        <td>{{ $attribute->title }}</td>
-                                        @foreach($relations as $relation)
-                                            @if($relation->id == $attribute->relation)
-                                                <td>{{ $relation->title }}</td>
+                                        <td><a href="{{ url("/categories/".$category->slug)  }}">{{ $category->title }}</a></td>
+                                        <td>
+                                            @if(Auth::check() && Auth::user()->role == "a")
+                                                <a href="{{ url("/categories/".$category->id."/edit")  }}">Edit</a>
                                             @endif
-                                        @endforeach
+                                        </td>
+
                                     </tr>
                                 @endforeach
                             </table>

@@ -7,7 +7,11 @@
     "require": {
         "php": ">=5.6.4",
         "laravel/framework": "5.3.*",
-        "laravel/socialite": "^2.0"
+        "laravel/socialite": "^2.0",
+        "mmanos/laravel-search": "^1.0",
+        "zendframework/zendsearch": "dev-master",
+        "elasticsearch/elasticsearch": "^5.0",
+        "algolia/algoliasearch-client-php": "^1.13"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

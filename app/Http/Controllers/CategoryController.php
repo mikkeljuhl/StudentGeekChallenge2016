@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\ProductCategory;
 use Illuminate\Http\Request;
 use Auth;
+use Search;
+use Redirect;
 use App\Category;
+use App\Product;
 
 class CategoryController extends Controller
 {
@@ -14,11 +18,8 @@ class CategoryController extends Controller
 
     public function index(){
         $categories = Category::orderBy('created_at', 'asc')->get();
-        if(Auth::check() && Auth::user()->role == "a") {
-            return view('categories.admin.index', ['categories' => $categories]);
-        }else {
-            return view('categories.index', ['categories' => $categories]);
-        }
+
+        return view('categories.index', ['categories' => $categories]);
     }
 
     public function store(Request $request){
@@ -37,7 +38,17 @@ class CategoryController extends Controller
         $category->slug =  $request->slug;
 
         $category->save();
+
+        Search::insert("category_index", array(
+            'title' => $category->title,
+            'slug' => $category->slug,
+        ));
+
+        return Redirect::back()->with('message', 'Category created');
+
     }
+
+
 
     public function edit(Category $category){
         if(!Auth::check() || Auth::user()->role != "a"){
@@ -62,5 +73,24 @@ class CategoryController extends Controller
         $category->slug =  $request->slug;
 
         $category->save();
+
+        return Redirect::back()->with('message', 'Category updated');
+    }
+
+    public function show($slug){
+
+        $category = Category::where('slug',$slug)->first();
+        if($category == null){
+            return "404";
+        }
+        $product_ids = ProductCategory::where('category_id',$category->id)->get();
+
+        $products = array();
+        foreach($product_ids as $product_id){
+            $product = Product::where('id',$product_id->product_id)->first();
+            array_push($products, $product);
+        }
+
+        return view('products.listing', ['products' => $products]);
     }
 }

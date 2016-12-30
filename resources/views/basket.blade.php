@@ -8,6 +8,11 @@
                     <div class="panel-heading">Dashboard</div>
 
                     <div class="panel-body">
+
+                        @if(session()->get('message'))
+                            <div class="alert alert-success alert-dismissable">{{ session()->get('message') }}</div>
+                        @endif
+
                         <table style="width:100%;">
                             <thead>
                                 <th>Title</th>

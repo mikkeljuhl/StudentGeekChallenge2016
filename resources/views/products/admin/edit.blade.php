@@ -18,6 +18,10 @@
                         <div class="panel-heading">Edit product</div>
                     @endif
                     <div class="panel-body">
+                        @if(session()->get('message'))
+                            <div class="alert alert-success alert-dismissable">{{ session()->get('message') }}</div>
+                        @endif
+
 
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">

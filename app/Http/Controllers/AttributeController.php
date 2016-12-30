@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\AttributeRelation;
 use Auth;
+use Redirect;
 use App\Attribute;
 use Illuminate\Http\Request;
 
@@ -10,11 +12,15 @@ class AttributeController extends Controller
 {
     public function index(){
         $attributes = Attribute::orderBy('created_at','asc')->get();
+        $relations = AttributeRelation::get();
 
-        return view('attributes.index', ["attributes" => $attributes]);
+        return view('attributes.index', ["attributes" => $attributes, "relations" => $relations]);
     }
     public function create(){
-        return view('attributes.create');
+
+        $relations = AttributeRelation::get();
+
+        return view('attributes.create', ['relations' => $relations]);
     }
     public function store(Request $request){
         if(!Auth::check() || Auth::user()->role != "a"){
@@ -33,10 +39,14 @@ class AttributeController extends Controller
         $attribute->relation = $request->relation;
 
         $attribute->save();
-        return $attribute;
+        return Redirect::back()->with('message', 'Attribute created');
+
     }
     public function edit(Attribute $attribute){
-        return view('attributes.edit', ["attribute" => $attribute]);
+
+        $relations = AttributeRelation::get();
+
+        return view('attributes.edit', ["attribute" => $attribute, "relations" => $relations]);
     }
     public function update(Attribute $attribute, Request $request){
         if(!Auth::check() || Auth::user()->role != "a"){
@@ -51,8 +61,8 @@ class AttributeController extends Controller
 
         $attribute->title = $request->title;
         $attribute->relation = $request->relation;
-
         $attribute->save();
-        return $attribute;
+
+        return Redirect::back()->with('message', 'Attribute updated');
     }
 }

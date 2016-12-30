@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Auth;
+use Redirect;
 use App\AttributeRelation;
 use Illuminate\Http\Request;
 
@@ -30,7 +31,10 @@ class AttributeRelationController extends Controller
         $attribute->title = $request->title;
 
         $attribute->save();
-        return $attribute;
+
+        $attributes = AttributeRelation::orderBy('created_at','asc')->get();
+
+        return Redirect::back()->with('message', 'Attribute relation created');
     }
     public function edit(AttributeRelation $attribute){
         return view('attributes.relations.edit', ["attribute" => $attribute]);
@@ -48,6 +52,6 @@ class AttributeRelationController extends Controller
         $attribute->title = $request->title;
 
         $attribute->save();
-        return $attribute;
+        return Redirect::back()->with('message', 'Attribute relation updated');
     }
 }

@@ -2,6 +2,9 @@
 
 
 use App\Order;
+use App\Product;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,15 +16,24 @@ use App\Order;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function(){
+}
+
+
+);
 
 
 Auth::routes();
 
+Route::get('/','CategoryController@index');
 Route::get('/home','ProductController@index');
 
+Route::get('/auth/overview', 'AccountController@show');
+Route::post('/auth/overview', 'AccountController@update');
+
+/* Search */
+
+Route::post('/products/search', 'SearchController@search');
 
 /* Basket */
 
@@ -45,23 +57,29 @@ Route::put('/shipping/methods/{method}', "ShippingMethodController@update");
 
 /* Products */
 
-Route::get('/products', 'ProductController@index');
+//ADMIN
 Route::get('/products/create', 'ProductController@create');
 Route::post('/products/store', 'ProductController@store');
-Route::get('/products/{slug}', 'ProductController@show');
 Route::get('/products/{product}/edit', 'ProductController@edit');
 Route::put('/products/{product}', 'ProductController@update');
 Route::delete('/products/{product}', 'ProductController@destroy');
 
+Route::get('/products', 'ProductController@index');
+Route::get('/products/{slug}', 'ProductController@show');
+
 /* Categories */
 
-Route::get('/categories', 'CategoryController@index');
+// ADMIN
 Route::get('/categories/create', 'CategoryController@create');
 Route::post('/categories/store', 'CategoryController@store');
-Route::get('/categories/{slug}', 'CategoryController@show');
 Route::get('/categories/{category}/edit', 'CategoryController@edit');
 Route::delete('/products/{category}', 'CategoryController@destroy');
 Route::put('/categories/{category}', 'CategoryController@update');
+
+
+Route::get('/categories', 'CategoryController@index');
+Route::get('/categories/{slug}', 'CategoryController@show');
+
 
 /* Attributes */
 

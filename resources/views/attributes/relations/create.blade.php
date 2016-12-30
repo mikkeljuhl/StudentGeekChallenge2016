@@ -13,8 +13,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Create Attribute Relation</div>
                     <div class="panel-body">
+                        @if(session()->get('message'))
+                            <div class="alert alert-success alert-dismissable">{{ session()->get('message') }}</div>
+                        @endif
 
-                        @if (count($errors) > 0)
+                    @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <ul>
                                     @foreach ($errors->all() as $error)

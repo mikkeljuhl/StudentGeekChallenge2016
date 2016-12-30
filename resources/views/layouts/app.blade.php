@@ -10,6 +10,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
 
@@ -43,7 +44,16 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <form class="navbar-form" role="search" method="post" action="{{ action('SearchController@search') }}" >
+                            {{ csrf_field() }}
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search" name="search_query" id="srch-term">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">Search</button>
+                                </div>
+                            </div>
+                        </form>
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -54,12 +64,41 @@
                             <li><a href="{{ url('/register') }}">Register</a></li>
                         @else
 
+                            <li><a href="{{ url('/categories') }}">Categories</a></li>
+                            <li><a href="{{ url('/products') }}">Products</a></li>
+                            <li><a href="{{ url('/orders/overview') }}">Order Overview</a></li>
+                            <li><a href="{{ url('/basket') }}">Basket</a></li>
+
+
+                            @if(Auth::user()->role == "a")
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                        Admin Area
+                                        <span class="caret"></span></a>
+
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="{{ url('/attribute/relations') }}">Attribute relations</a></li>
+                                        <li><a href="{{ url('/attribute/relations/create') }}">Create attribute relation</a></li>
+                                        <li><a href="{{ url('/attributes/') }}">Attributes</a></li>
+                                        <li><a href="{{ url('/attributes/create') }}">Create attribute</a></li>
+                                        <li><a href="{{ url('/categories/create') }}">Create category</a></li>
+                                        <li><a href="{{ url('/products/create') }}">Create product</a></li>
+                                        <li><a href="{{ url('/shipping/methods') }}">Shipping methods</a></li>
+                                        <li><a href="{{ url('/shipping/methods/create') }}">Create shipping method</a></li>
+                                    </ul>
+                                </li>
+                            @endif
+
+
+
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                    @if(Auth::user()->role == "a") ADMIN: @else USER: @endif {{ Auth::user()->name }}  <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{ url('/auth/overview') }}">Account Overview</a></li>
+
                                     <li>
                                         <a href="{{ url('/logout') }}"
                                             onclick="event.preventDefault();

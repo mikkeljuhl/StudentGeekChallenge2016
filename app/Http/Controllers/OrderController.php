@@ -64,14 +64,7 @@ class OrderController extends Controller
 
         $order->shipping_method_id = $request->shipping_method;
         $order->shipping_method_price = $method->price;
-
-        $invoice_line = new InvoiceLine();
-        $invoice_line->price = $method->price;
-        $invoice_line->qty = 1;
-        $invoice_line->product_sku = "SHIPPING";
-        $invoice_line->title = $method->title;
-        $invoice_line->order_id = $order->id;
-        $invoice_line->save();
+        $order->shipping_method_title = $method->title;
 
         foreach(BasketController::getCartItems() as $item){
             $invoice_line = new InvoiceLine();
@@ -117,6 +110,7 @@ class OrderController extends Controller
         $order->user_id = Auth()->user()->id;
         $order->phone = $request->phone;
         $order->subtotal = BasketController::getSubTotal();
+        $order->tax = BasketController::getTax();
 
         $order->save();
 
@@ -124,6 +118,11 @@ class OrderController extends Controller
 
         return redirect("/orders/overview/".$order->id)->with("message", "Thank you for the order!");
 
+    }
+
+
+    public static function getVAT($price){
+        return $price * 0.25;
     }
 
 
