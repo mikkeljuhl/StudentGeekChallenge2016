@@ -13,8 +13,7 @@ class Attributes extends Migration
      */
     public function up()
     {
-        Schema::create("attributes", function(Blueprint $table)
-        {
+        Schema::create("attributes", function (Blueprint $table) {
             $table->increments("id");
             $table->string("title");
             $table->integer("relation");

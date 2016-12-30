@@ -27,7 +27,7 @@ class Products extends Migration
             $table->index('sku');
             $table->index('slug');
             $table->unique('sku');
-    });
+        });
     }
 
     /**

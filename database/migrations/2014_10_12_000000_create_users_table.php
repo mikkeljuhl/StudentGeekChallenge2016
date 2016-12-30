@@ -30,7 +30,6 @@ class CreateUsersTable extends Migration
             $table->string("shipping_city")->nullable();
             $table->string("billing_city")->nullable();
             $table->string("phone")->nullable();
-
         });
     }
 

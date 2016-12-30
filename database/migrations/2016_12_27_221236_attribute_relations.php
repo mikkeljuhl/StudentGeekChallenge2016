@@ -13,8 +13,7 @@ class AttributeRelations extends Migration
      */
     public function up()
     {
-        Schema::create("attribute_relation", function(Blueprint $table)
-        {
+        Schema::create("attribute_relation", function (Blueprint $table) {
             $table->increments("id");
             $table->string("title");
             $table->timestamps();
