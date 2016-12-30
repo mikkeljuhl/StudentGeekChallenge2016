@@ -8,16 +8,19 @@ use Redirect;
 
 class ShippingMethodController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $methods = ShippingMethod::get();
         return view("shipping_methods.index", ["methods" => $methods]);
     }
 
-    public function create(){
+    public function create()
+    {
         return view("shipping_methods.create");
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $this->validate($request,
             [
                 'title' => 'required',
@@ -36,11 +39,13 @@ class ShippingMethodController extends Controller
 
     }
 
-    public function edit(ShippingMethod $method){
+    public function edit(ShippingMethod $method)
+    {
         return view("shipping_methods.edit", ["method" => $method]);
     }
 
-    public function update(Request $request, ShippingMethod $method){
+    public function update(Request $request, ShippingMethod $method)
+    {
         $this->validate($request,
             [
                 'title' => 'required',

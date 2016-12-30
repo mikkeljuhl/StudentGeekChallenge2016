@@ -10,21 +10,26 @@ use Illuminate\Http\Request;
 
 class AttributeController extends Controller
 {
-    public function index(){
-        $attributes = Attribute::orderBy('created_at','asc')->get();
+    public function index()
+    {
+        $attributes = Attribute::orderBy('created_at', 'asc')->get();
         $relations = AttributeRelation::get();
 
         return view('attributes.index', ["attributes" => $attributes, "relations" => $relations]);
     }
-    public function create(){
+
+    public function create()
+    {
 
         $relations = AttributeRelation::get();
 
         return view('attributes.create', ['relations' => $relations]);
     }
-    public function store(Request $request){
-        if(!Auth::check() || Auth::user()->role != "a"){
-            return view ('auth.restricted');
+
+    public function store(Request $request)
+    {
+        if (!Auth::check() || Auth::user()->role != "a") {
+            return view('auth.restricted');
         }
 
         $this->validate($request,
@@ -42,15 +47,19 @@ class AttributeController extends Controller
         return Redirect::back()->with('message', 'Attribute created');
 
     }
-    public function edit(Attribute $attribute){
+
+    public function edit(Attribute $attribute)
+    {
 
         $relations = AttributeRelation::get();
 
         return view('attributes.edit', ["attribute" => $attribute, "relations" => $relations]);
     }
-    public function update(Attribute $attribute, Request $request){
-        if(!Auth::check() || Auth::user()->role != "a"){
-            return view ('auth.restricted');
+
+    public function update(Attribute $attribute, Request $request)
+    {
+        if (!Auth::check() || Auth::user()->role != "a") {
+            return view('auth.restricted');
         }
 
         $this->validate($request,

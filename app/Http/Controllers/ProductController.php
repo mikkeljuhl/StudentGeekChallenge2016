@@ -41,7 +41,6 @@ class ProductController extends Controller
         }
 
 
-
         $this->validate($request,
             [
                 'sku' => 'required|max:225',
@@ -62,14 +61,14 @@ class ProductController extends Controller
         $product->short_description = $request->short_description;
         $product->description = $request->description;
 
-        if($request->hasFile('image_url')){
+        if ($request->hasFile('image_url')) {
 
             $file = $request->file('image_url');
             $name = $product->sku . '.' . $request->file('image_url')->getClientOriginalExtension();
 
             $file->move(base_path() . '/public/img/products/', $name);
 
-            $product->image_url = '/img/products/'. $name;
+            $product->image_url = '/img/products/' . $name;
             Log::info('Product image added: ' . $product->image_url);
 
         }
@@ -91,8 +90,8 @@ class ProductController extends Controller
             }
         }
 
-        if(count($request->categories ) > 0){
-            foreach($request->categories as $category_id){
+        if (count($request->categories) > 0) {
+            foreach ($request->categories as $category_id) {
                 $product_category = new ProductCategory();
                 $product_category->product_id = $product->id;
                 $product_category->category_id = $category_id;
@@ -109,15 +108,15 @@ class ProductController extends Controller
             'description' => $product->description,
         ));
 
-        return Redirect::back()->with('message', 'Product with title '.$product->title.' created!');
+        return Redirect::back()->with('message', 'Product with title ' . $product->title . ' created!');
     }
 
     public function index()
     {
 
 
-            $products = Product::orderBy('created_at', 'asc')->get();
-            return view('products.index', ['products' => $products]);
+        $products = Product::orderBy('created_at', 'asc')->get();
+        return view('products.index', ['products' => $products]);
 
     }
 
@@ -145,14 +144,14 @@ class ProductController extends Controller
         $product->short_description = $request->short_description;
         $product->description = $request->description;
 
-        if($request->hasFile('image_url')){
+        if ($request->hasFile('image_url')) {
 
             $file = $request->file('image_url');
             $name = $product->sku . '.' . $request->file('image_url')->getClientOriginalExtension();
 
             $file->move(base_path() . '/public/img/products/', $name);
 
-            $product->image_url = '/img/products/'. $name;
+            $product->image_url = '/img/products/' . $name;
             Log::info('Product image added: ' . $product->image_url);
 
         }
@@ -162,7 +161,7 @@ class ProductController extends Controller
         Log::info('Product updated: ' . $product->title);
 
         //brute force: delete all product attributes with associated product id -- works ok for now
-        ProductAttribute::where('product_id',$product->id)->delete();
+        ProductAttribute::where('product_id', $product->id)->delete();
 
         foreach (AttributeRelation::get() as $attribute_relation) {
             $attribute_relations_request_id = "att_r_" . $attribute_relation->id;
@@ -178,9 +177,9 @@ class ProductController extends Controller
             }
         }
 
-        ProductCategory::where('product_id',$product->id)->delete();
+        ProductCategory::where('product_id', $product->id)->delete();
 
-        foreach($request->categories as $category_id){
+        foreach ($request->categories as $category_id) {
             $product_category = new ProductCategory();
             $product_category->product_id = $product->id;
             $product_category->category_id = $category_id;
@@ -189,7 +188,7 @@ class ProductController extends Controller
             Log::info('Product ' . $product->title . ' is in category: ' . $category_id);
         }
 
-        return Redirect::back()->with('message', 'Product with title '.$product->title.' updated!');
+        return Redirect::back()->with('message', 'Product with title ' . $product->title . ' updated!');
     }
 
     public function edit(Product $product)
@@ -201,19 +200,18 @@ class ProductController extends Controller
         $categories = Category::get();
         $attributes = Attribute::get();
         $attribute_relations = AttributeRelation::get();
-        $product_attributes = ProductAttribute::where("product_id",$product->id)->get();
-        $product_categories = ProductCategory::where("product_id",$product->id)->get();
+        $product_attributes = ProductAttribute::where("product_id", $product->id)->get();
+        $product_categories = ProductCategory::where("product_id", $product->id)->get();
 
         $product_categories_id = array();
-        foreach($product_categories as $product_category){
-            array_push($product_categories_id,$product_category->category_id);
+        foreach ($product_categories as $product_category) {
+            array_push($product_categories_id, $product_category->category_id);
         }
 
         $product_attribute_id = array();
-        foreach($product_attributes as $product_attribute){
-            array_push($product_attribute_id,$product_attribute->attribute_id);
+        foreach ($product_attributes as $product_attribute) {
+            array_push($product_attribute_id, $product_attribute->attribute_id);
         }
-
 
 
         return view('products.admin.edit',
@@ -232,23 +230,23 @@ class ProductController extends Controller
     {
         $product = Product::where('slug', $slug)->first();
 
-        if($product == null){
+        if ($product == null) {
             return "404";
         }
 
         $attributes = Attribute::get();
 
-        $product_attributes = ProductAttribute::where('product_id',$product->id)->get();
+        $product_attributes = ProductAttribute::where('product_id', $product->id)->get();
 
         $product_attribute_relations = AttributeRelation::get();
 
-        $product_categories = ProductCategory::where('product_id',$product->id)->get();
+        $product_categories = ProductCategory::where('product_id', $product->id)->get();
 
         $categories = array();
-        foreach ($product_categories as $product_category){
-            $category = Category::where('id',$product_category->category_id)->first();
+        foreach ($product_categories as $product_category) {
+            $category = Category::where('id', $product_category->category_id)->first();
             array_push($categories, $category);
         }
-        return view('products.show', ['product' => $product, 'attributes' => $attributes, 'product_attributes' => $product_attributes, 'product_attribute_relations' => $product_attribute_relations,'categories' => $categories]);
+        return view('products.show', ['product' => $product, 'attributes' => $attributes, 'product_attributes' => $product_attributes, 'product_attribute_relations' => $product_attribute_relations, 'categories' => $categories]);
     }
 }

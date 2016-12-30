@@ -13,11 +13,13 @@ class AccountController extends Controller
         $this->middleware('auth');
     }
 
-    public function show(){
+    public function show()
+    {
         return view('auth.overview', ['user' => Auth::user()]);
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $user = Auth::user();
 
         $this->validate($request,
@@ -45,7 +47,7 @@ class AccountController extends Controller
         $user->billing_country = $request->billing_country;
 
         $user->phone = $request->phone;
-        $user->name= $request->name;
+        $user->name = $request->name;
 
         $user->save();
 

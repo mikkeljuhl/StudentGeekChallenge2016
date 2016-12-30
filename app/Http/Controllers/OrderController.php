@@ -18,12 +18,14 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index()
+    {
         $orders = Order::where("user_id", Auth::user()->id)->get();
         return view("orders.overview.index", ["orders" => $orders]);
     }
 
-    public function show(Order $order){
+    public function show(Order $order)
+    {
         $invoice_lines = InvoiceLine::where("order_id", $order->id)->get();
         $date = new \DateTime($order->created_at);
         $date = $date->format("d/m-Y H:i");
@@ -31,18 +33,20 @@ class OrderController extends Controller
         return view("orders.overview.show", ["order" => $order, "date" => $date, "invoice_lines" => $invoice_lines]);
     }
 
-    public function create(){
+    public function create()
+    {
 
         $basket_items = BasketController::getCartItems();
         $subtotal = BasketController::getSubTotal();
         $tax = BasketController::getTax();
         $total = $tax + $subtotal;
-        $shipping_methods = ShippingMethod::where('min_order_price','<=',$total)->get();
+        $shipping_methods = ShippingMethod::where('min_order_price', '<=', $total)->get();
 
         return view("orders.details", ['user' => Auth::user(), 'basket_items' => $basket_items, 'subtotal' => $subtotal, 'tax' => $tax, 'shipping_methods' => $shipping_methods]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $this->validate($request,
             [
                 'shipping_address' => 'required|max:225',
@@ -60,13 +64,13 @@ class OrderController extends Controller
         $order = new Order();
         $order->save(); // so we can get an id
 
-        $method = ShippingMethod::where('id',$request->shipping_method)->first();
+        $method = ShippingMethod::where('id', $request->shipping_method)->first();
 
         $order->shipping_method_id = $request->shipping_method;
         $order->shipping_method_price = $method->price;
         $order->shipping_method_title = $method->title;
 
-        foreach(BasketController::getCartItems() as $item){
+        foreach (BasketController::getCartItems() as $item) {
             $invoice_line = new InvoiceLine();
 
             $invoice_line->price = $item->price;
@@ -116,12 +120,13 @@ class OrderController extends Controller
 
         BasketController::clearBasket();
 
-        return redirect("/orders/overview/".$order->id)->with("message", "Thank you for the order!");
+        return redirect("/orders/overview/" . $order->id)->with("message", "Thank you for the order!");
 
     }
 
 
-    public static function getVAT($price){
+    public static function getVAT($price)
+    {
         return $price * 0.25;
     }
 
