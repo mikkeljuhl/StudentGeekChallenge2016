@@ -16,7 +16,7 @@
                             <div class="row">
                                 <div class="col-sm-5">
                                     @if($product->image_url)
-                                    <img src="{{$product->image_url}}" alt="{{$product->title}}" style="width:100%;"/>
+                                        <img src="{{ url($product->image_url) }}" alt="{{$product->title}}" style="width:100%;"/>
                                     @endif
                                     <legend style="margin-top:20px;margin-bottom:5px;">Attributes</legend>
                                     <table class="table-striped" style="width:75%;">
