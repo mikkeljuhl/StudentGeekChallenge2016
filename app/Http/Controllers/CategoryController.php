@@ -20,7 +20,9 @@ class CategoryController extends Controller
 
     public function index()
     {
-        Log::info('[INFO]: Show frontpage from IP address: ' . $_SERVER['REMOTE_ADDR']);
+        $ipaddress = $_SERVER['REMOTE_ADDR'];
+        Log::info('[VISITOR]: '. $ipaddress);
+
         $categories = Category::orderBy('created_at', 'asc')->get();
         return view('categories.index', ['categories' => $categories]);
     }
