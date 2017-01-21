@@ -8,6 +8,7 @@ use Auth;
 use Search;
 use Redirect;
 use App\Category;
+use Log;
 use App\Product;
 
 class CategoryController extends Controller
@@ -19,8 +20,8 @@ class CategoryController extends Controller
 
     public function index()
     {
+        Log::info('[INFO]: Show frontpage from IP address: ' . $_SERVER['REMOTE_ADDR']);
         $categories = Category::orderBy('created_at', 'asc')->get();
-
         return view('categories.index', ['categories' => $categories]);
     }
 
