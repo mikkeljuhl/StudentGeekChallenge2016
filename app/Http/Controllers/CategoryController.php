@@ -21,9 +21,6 @@ class CategoryController extends Controller
     {
         $categories = Category::orderBy('created_at', 'asc')->get();
 
-        $category = Category::where('slug','empty_category')->get();
-        $category->save();
-
         return view('categories.index', ['categories' => $categories]);
     }
 
